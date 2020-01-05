@@ -7,6 +7,8 @@ public class GrabMgr : MonoBehaviour
     private Transform tr;
     private Transform grabObject;
 
+    private bool isTouched = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,13 +18,28 @@ public class GrabMgr : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger))
+        if (isTouched && OVRInput.GetDown(OVRInput.Button.SecondaryHandTrigger))
         {
-            Debug.Log("왼손 트리거 버튼");
+            grabObject.SetParent(this.transform); //컨트롤러 하위로 차일드화 시킴
+            grabObject.GetComponent<Rigidbody>().isKinematic = true;
         }
-        if (OVRInput.GetUp(OVRInput.Button.SecondaryHandTrigger))
+
+        // if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger))
+        // {
+        //     Debug.Log("왼손 트리거 버튼");
+        // }
+        // if (OVRInput.GetUp(OVRInput.Button.SecondaryHandTrigger))
+        // {
+        //     Debug.Log("오른손 그랩버튼");
+        // }
+    }
+
+    void OnTriggerEnter(Collider coll)
+    {
+        if (coll.CompareTag("BALL"))
         {
-            Debug.Log("오른손 그랩버튼");
+            grabObject = coll.transform;
+            isTouched = true;
         }
     }
 }
