@@ -9,10 +9,13 @@ public class LaserPointer : MonoBehaviour
     public Color laserColor = Color.green;
 
     private RaycastHit hit;
+    private Transform pointerTr;
 
     // Start is called before the first frame update
     void Start()
     {
+        pointerTr = GameObject.Find("Pointer").transform;
+
         CreateLine();
     }
 
@@ -37,6 +40,8 @@ public class LaserPointer : MonoBehaviour
         if (Physics.Raycast(transform.position, transform.forward, out hit, maxDistance))
         {
             line.SetPosition(1, new Vector3(0, 0, hit.distance));
+            pointerTr.position = hit.point + (hit.normal * 0.01f);
+            pointerTr.rotation = Quaternion.LookRotation(hit.normal);
         }
     }
 }
