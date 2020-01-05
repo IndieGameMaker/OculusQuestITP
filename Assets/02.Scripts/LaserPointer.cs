@@ -10,11 +10,13 @@ public class LaserPointer : MonoBehaviour
 
     private RaycastHit hit;
     private Transform pointerTr;
+    private Transform parentTr;
 
     // Start is called before the first frame update
     void Start()
     {
         pointerTr = GameObject.Find("Pointer").transform;
+        parentTr = GameObject.Find("OVRCameraRig").transform;
 
         CreateLine();
     }
@@ -42,6 +44,11 @@ public class LaserPointer : MonoBehaviour
             line.SetPosition(1, new Vector3(0, 0, hit.distance));
             pointerTr.position = hit.point + (hit.normal * 0.01f);
             pointerTr.rotation = Quaternion.LookRotation(hit.normal);
+
+            if (OVRInput.GetUp(OVRInput.Button.SecondaryIndexTrigger))
+            {
+                parentTr.position = hit.point;
+            }
         }
     }
 }
