@@ -24,6 +24,16 @@ public class GrabMgr : MonoBehaviour
             grabObject.GetComponent<Rigidbody>().isKinematic = true;
         }
 
+        if (grabObject != null && OVRInput.GetUp(OVRInput.Button.SecondaryHandTrigger))
+        {
+            grabObject.SetParent(null);
+            Vector3 velocity = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch);
+            grabObject.GetComponent<Rigidbody>().velocity = velocity;
+            grabObject.GetComponent<Rigidbody>().isKinematic = false;
+            isTouched = false;
+            grabObject = null;
+        }
+
         // if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger))
         // {
         //     Debug.Log("왼손 트리거 버튼");
@@ -40,6 +50,14 @@ public class GrabMgr : MonoBehaviour
         {
             grabObject = coll.transform;
             isTouched = true;
+        }
+    }
+
+    void OnTriggerStay(Collider coll)
+    {
+        if (coll.CompareTag("BALL"))
+        {
+            OVRInput.SetControllerVibration(0.5f, 0.5f, OVRInput.Controller.RTouch);
         }
     }
 }
